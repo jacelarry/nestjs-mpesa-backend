@@ -9,9 +9,9 @@
     "target": "es2019",
     "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src",
     "baseUrl": "./",
     "incremental": true
   },
-  "exclude": ["node_modules", "dist", "prisma", "test"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
