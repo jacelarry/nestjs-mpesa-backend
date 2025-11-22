@@ -2,17 +2,6 @@
 .env.*
 node_modules/
 dist/
-import helmet from 'helmet';
-
-node_modules
-dist
-.env
-.prisma/
 prisma-client
 .DS_Store
 npm-debug.log
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
