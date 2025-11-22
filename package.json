@@ -36,6 +36,7 @@
     "@nestjs/cli": "^10.4.9"
   },
   "cacheBust": "1",
+  "cacheBust2": "force-rebuild-1",
   "devDependencies": {
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
