@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  msisdn    String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  payments  Payment[]
+}
+
+model Payment {
+  id                Int      @id @default(autoincrement())
+  transactionId     String   @unique
+  amount            Float
+  msisdn            String
+  businessShortCode String
+  billRefNumber     String?
+  thirdPartyTransId String?
+  status            String   @default("PENDING")
+  processed         Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  processedAt       DateTime?
+  client            Client?  @relation(fields: [msisdn], references: [msisdn], onDelete: Cascade)
+  meta              Json?
+}
+
+model Bundle {
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Float
+  code      String
+  createdAt DateTime @default(now())
+}
+
+model PaymentLog {
+  id        Int      @id @default(autoincrement())
+  level     String
+  message   String
+  meta      Json?
+  createdAt DateTime @default(now())
+}
