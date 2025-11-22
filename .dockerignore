@@ -5,6 +5,6 @@ dist
 .env.*
 .git
 .gitignore
+docker-compose.yml
 Dockerfile
 Dockerfile.prod
-docker-compose.yml
