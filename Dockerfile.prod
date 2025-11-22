@@ -10,7 +10,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build && if [ ! -f dist/main.js ]; then echo "ERROR: dist/main.js not found after build"; ls -l dist; exit 1; fi
+RUN npm run build --loglevel verbose && if [ ! -f dist/main.js ]; then echo "ERROR: dist/main.js not found after build"; ls -l dist; exit 1; fi
 
 EXPOSE 3000
 CMD ["npm", "start"]
