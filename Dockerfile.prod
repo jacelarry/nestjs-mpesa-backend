@@ -2,8 +2,29 @@
 # ---- Base Node image ----
 
 
-# Use Debian-based image (NOT Alpine)
-FROM node:18-slim
+
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+# Copy Prisma schema
+COPY prisma ./prisma
+
+# Generate Prisma Client
+RUN npx prisma generate
+
+# Copy the rest of the app
+COPY . .
+
+# Build NestJS
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["node", "dist/main.js"]
 
 WORKDIR /app
 
@@ -11,10 +32,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copy source code
+# Copy source
 COPY . .
 
-# Generate Prisma client
+# Re-generate Prisma client for correct platform (linux-glibc)
 RUN npx prisma generate
 
 # Build NestJS
@@ -22,7 +43,6 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:prod"]
 
 WORKDIR /app
 
