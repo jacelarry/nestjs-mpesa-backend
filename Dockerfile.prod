@@ -1,17 +1,25 @@
-# Cache bust 2: force rebuild
-# Cache bust: force rebuild
-# Use official Node.js image
-FROM node:20-alpine
+
+# ---- Base Node image ----
+FROM node:18-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
 
 RUN npm install
-COPY . .
+
+# Copy Prisma schema BEFORE prisma generate
+COPY prisma ./prisma
+
+# Generate Prisma Client
 RUN npx prisma generate
 
-RUN npm run build --loglevel verbose && if [ ! -f dist/main.js ]; then echo "ERROR: dist/main.js not found after build"; ls -l dist; exit 1; fi
+# Copy all NestJS source
+COPY . .
+
+# Build NestJS
+RUN npm run build
 
 EXPOSE 3000
-CMD ["npm", "start"]
+
+CMD ["node", "dist/main.js"]
