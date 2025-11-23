@@ -46,3 +46,4 @@ model PaymentLog {
   meta      Json?
   createdAt DateTime @default(now())
 }
+
