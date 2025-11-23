@@ -6,10 +6,10 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
-RUN npx prisma generate
 
+RUN npm install
 COPY . .
+RUN npx prisma generate
 
 RUN npm run build --loglevel verbose && if [ ! -f dist/main.js ]; then echo "ERROR: dist/main.js not found after build"; ls -l dist; exit 1; fi
 
