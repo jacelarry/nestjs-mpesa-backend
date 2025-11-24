@@ -1,30 +1,5 @@
-
-# ---- Base Node image ----
-
-
-
-FROM node:20-slim
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-# Copy Prisma schema
-COPY prisma ./prisma
-
-# Generate Prisma Client
-RUN npx prisma generate
-
-# Copy the rest of the app
-COPY . .
-
-# Build NestJS
-RUN npm run build
-
-EXPOSE 3000
-
-CMD ["node", "dist/main.js"]
+# Use Debian-based Node image (Prisma-compatible)
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
@@ -32,40 +7,30 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+# Copy Prisma schema before generate
+COPY prisma ./prisma
+RUN npx prisma generate
+
 # Copy source
 COPY . .
 
-# Re-generate Prisma client for correct platform (linux-glibc)
-RUN npx prisma generate
-
 # Build NestJS
 RUN npm run build
 
-EXPOSE 3000
 
-
-WORKDIR /app
-
-# Install OpenSSL and OpenSSL 1.1 compatibility for Prisma
-RUN apk add --no-cache openssl openssl1.1-compat
+# ---- Production image ----
+FROM node:20-slim
 
 WORKDIR /app
 
+# Copy only necessary files
 COPY package*.json ./
+RUN npm install --omit=dev
 
-RUN npm install
-
-# Copy Prisma schema BEFORE prisma generate
-COPY prisma ./prisma
-
-# Generate Prisma Client
-RUN npx prisma generate
-
-# Copy all NestJS source
-COPY . .
-
-# Build NestJS
-RUN npm run build
+# Copy Prisma Client + built code
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
 
 EXPOSE 3000
 
