@@ -1,23 +1,31 @@
-# Use official Node.js image
-FROM node:20-alpine
+# Use Debian-based Node (Prisma compatible)
+FROM node:20-bullseye AS builder
 
 WORKDIR /app
 
-# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy Prisma schema BEFORE running prisma generate
 COPY prisma ./prisma
-
-# Generate Prisma Client
 RUN npx prisma generate
 
-# Copy the rest of the app
 COPY . .
-
-# Build NestJS
 RUN npm run build
+
+
+# --- Production image ---
+FROM node:20-bullseye
+
+WORKDIR /app
+
+RUN apt-get update -y \
+    && apt-get install -y openssl libssl1.1 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
 
 EXPOSE 3000
 
