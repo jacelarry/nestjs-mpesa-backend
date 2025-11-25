@@ -6,15 +6,17 @@ import { FcmService } from '../notifications/fcm.service';
 import { PaymentDto } from './payment.dto';
 
 describe('MpesaService', () => {
-    it('should throw error for missing payment fields', async () => {
-      await expect(service.processPayment({ msisdn: '', amount: 0, businessShortCode: '' })).rejects.toThrow('Missing required payment fields');
-    });
-
-    it('should throw error for invalid msisdn format', async () => {
-      await expect(service.processPayment({ msisdn: '123', amount: 100, businessShortCode: '123456' })).resolves.toHaveProperty('status', 'success'); // Simulated logic, update if you add validation
-    });
+  // Variable declarations rewritten to ensure no hidden characters
   let service: MpesaService;
   let prisma: PrismaService;
+
+  it('should throw error for missing payment fields', async () => {
+    await expect(service.processPayment({ msisdn: '', amount: 0, businessShortCode: '' })).rejects.toThrow('Missing required payment fields');
+  });
+
+  it('should throw error for invalid msisdn format', async () => {
+    await expect(service.processPayment({ msisdn: '123', amount: 100, businessShortCode: '123456' })).resolves.toHaveProperty('status', 'success'); // Simulated logic, update if you add validation
+  });
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

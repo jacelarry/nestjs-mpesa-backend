@@ -1,7 +1,38 @@
-.env
-.env.*
+
+# Node
 node_modules/
 dist/
-prisma-client
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS
 .DS_Store
-npm-debug.log
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Others
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Credentials
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Ignore example env files but keep them for reference
+!.env.example

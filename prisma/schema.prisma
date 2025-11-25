@@ -39,11 +39,14 @@ model Bundle {
   createdAt DateTime @default(now())
 }
 
-model PaymentLog {
-  id        Int      @id @default(autoincrement())
-  level     String
-  message   String
-  meta      Json?
-  createdAt DateTime @default(now())
+
+model UssdCode {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique
+  type        String
+  description String?
+  pn          String?
+  ownerId     Int
+  createdAt   DateTime @default(now())
 }
 

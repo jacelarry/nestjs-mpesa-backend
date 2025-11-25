@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { ExecutionContext } from '@nestjs/common';
 
 describe('MpesaController', () => {
+  // Variable declarations rewritten to ensure no hidden characters
   let controller: MpesaController;
   let service: MpesaService;
 

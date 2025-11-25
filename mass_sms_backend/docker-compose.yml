@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mass_sms
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  api:
+    build: .
+    depends_on:
+      - db
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgres://postgres:postgres@db:5432/mass_sms
+      JWT_SECRET: change_this_in_production
+      MPESA_CONSUMER_KEY: ""
+      MPESA_CONSUMER_SECRET: ""
+      MPESA_SHORTCODE: 174379
+      MPESA_PASSKEY: ""
+      MPESA_BASE_URL: https://sandbox.safaricom.co.ke
+      MPESA_CALLBACK_URL: http://host.docker.internal:4000/api/payments/callback/mpesa
+      TOKEN_PER_CURRENCY: 1
+      AT_USERNAME: massSmsApp
+      AT_API_KEY: atsk_8b118629c468e03db12f9914e95d95f75a20d3d33847318be687a42168ca031887d7fcb4
+      # AT_SENDER_ID: your_sender_id
+    ports:
+      - "4000:4000"
+volumes:
+  db_data:
